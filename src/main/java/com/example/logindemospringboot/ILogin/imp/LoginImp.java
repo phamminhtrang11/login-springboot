@@ -1,20 +1,23 @@
 package com.example.logindemospringboot.ILogin.imp;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LoginImp {
 
-    private static class LoginImpHelper {
-        private static final LoginImp ins = new LoginImp();
-    }
+    private final JdbcTemplate jdbcTemplate;
 
-    public static LoginImp getInstance() {
-        return LoginImpHelper.ins;
+    @Autowired
+    public LoginImp(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public boolean validUser(String username, String password) {
-//        String sql = "SELECT COUNT(*) FROM userslogin WHERE username = ? AND password = ?";
-//        int count = jdbcTemplate.queryForObject(sql, Integer.class, username, password);
+        String sql = "SELECT COUNT(*) FROM login WHERE username = ? AND password = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, username, password);
 
-        return "trang".equals(username) && "123".equals(password);
+        return count != null && count > 0;
     }
 }
